@@ -1,4 +1,4 @@
-package fr.salers.teamfight.party;
+package fr.salers.teamfight.manager;
 
 import com.alessiodp.parties.api.interfaces.Party;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
