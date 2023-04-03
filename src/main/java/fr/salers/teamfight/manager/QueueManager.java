@@ -33,7 +33,7 @@ public enum QueueManager {
         if (!queuedParties.contains(party)) queuedParties.add(party);
 
         party.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
-                player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été ajoutée à la queue."))
+                player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &bajoutée à la queue."))
         );
     }
 
@@ -41,8 +41,13 @@ public enum QueueManager {
         queuedParties.remove(party);
 
         party.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
-                player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été enlevée à la queue."))
+                player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &cretirée de la queue.."))
         );
+    }
+
+    public boolean isInQueue(final Player player) {
+        if(!PartyManager.INSTANCE.isInParty(player)) return false;
+        return queuedParties.contains(PartyManager.INSTANCE.getPartyFromPlayer(player));
     }
 
     public void handlePossibleMatch() {

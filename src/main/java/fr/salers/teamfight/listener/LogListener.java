@@ -1,6 +1,7 @@
 package fr.salers.teamfight.listener;
 
 import fr.salers.teamfight.TFight;
+import fr.salers.teamfight.config.Config;
 import fr.salers.teamfight.manager.PlayerManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +17,7 @@ public class LogListener implements Listener {
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
         TFight.INSTANCE.getPlayerManager().add(event.getPlayer());
+        event.getPlayer().teleport(Config.getLobbyLocation());
     }
 
     @EventHandler

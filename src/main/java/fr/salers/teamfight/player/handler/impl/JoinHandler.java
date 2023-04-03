@@ -4,6 +4,7 @@ import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.handler.AbstractHandler;
 import fr.salers.teamfight.utilities.CC;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -26,6 +27,8 @@ public class JoinHandler extends AbstractHandler {
         final Player player = ((PlayerJoinEvent) e).getPlayer();
 
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 3F, 0.5F);
+        player.getInventory().clear();
+        player.setGameMode(GameMode.SURVIVAL);
 
         player.sendMessage(CC.translate(
                         "&a&lTaiko &r&7- &eTeamFight v1.0\n" +

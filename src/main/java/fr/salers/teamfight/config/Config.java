@@ -3,11 +3,13 @@ package fr.salers.teamfight.config;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.utilities.CC;
 import lombok.Getter;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 
 @Getter
 public enum Config {
-    PREFIX("teamfight.prefix", "&a&lTAIKO &r&7> "),
-    BLOCK_BREAK("teamfight.block-break-enabled", true);
+    PREFIX("teamfight.prefix", "&a&lTAIKO &r&7> "),;
 
     private final String path;
     private final Object value;
@@ -27,5 +29,18 @@ public enum Config {
 
     public String translate() {
         return CC.translate((String) value);
+    }
+
+    public static Location getLobbyLocation() {
+        final FileConfiguration config = TFight.INSTANCE.getPlugin().getConfig();
+
+        return new Location(
+                Bukkit.getWorld(config.getString("teamfight.lobby.world")),
+                config.getDouble("teamfight.lobby.x"),
+                config.getDouble("teamfight.lobby.y"),
+                config.getDouble("teamfight.lobby.z")
+
+        );
+
     }
 }

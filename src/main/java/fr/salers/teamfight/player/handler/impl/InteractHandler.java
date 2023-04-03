@@ -1,5 +1,6 @@
 package fr.salers.teamfight.player.handler.impl;
 
+import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.handler.AbstractHandler;
@@ -28,8 +29,12 @@ public class InteractHandler extends AbstractHandler {
 
             if(inHand == null || !inHand.hasItemMeta()) return;
 
-            if(inHand.getItemMeta().getDisplayName().contains("Queue"))
-                QueueManager.INSTANCE.openQueueGUI(tfPlayer.getPlayer());
+
+            if(inHand.getItemMeta().getDisplayName().contains("Queue")) {
+                if(QueueManager.INSTANCE.isInQueue(tfPlayer.getPlayer()))
+                    QueueManager.INSTANCE.remove(PartyManager.INSTANCE.getPartyFromPlayer(tfPlayer.getPlayer()));
+                else QueueManager.INSTANCE.openQueueGUI(tfPlayer.getPlayer());
+            }
 
         } else if(e instanceof PlayerInteractAtEntityEvent) {
 
