@@ -1,0 +1,7 @@
+name: TaikoTFights
+version: '${project.version}'
+main: fr.salers.teamfight.TeamFightPlugin
+authors: [ SalersFR ]
+depend:
+  - Parties
+  - TaikoCore
