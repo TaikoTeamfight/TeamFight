@@ -4,8 +4,10 @@ import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.handler.AbstractHandler;
+import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -36,7 +38,13 @@ public class InteractHandler extends AbstractHandler {
                 else QueueManager.INSTANCE.openQueueGUI(tfPlayer.getPlayer());
             }
 
-        } else if(e instanceof PlayerInteractAtEntityEvent) {
+        } else if(e instanceof EntityDamageEvent) {
+            final ItemStack inHand = tfPlayer.getPlayer().getItemInHand();
+
+
+            if (!(tfPlayer.getPlayer().getInventory().contains(Material.IRON_SWORD) && tfPlayer.getPlayer().getInventory().contains(Material.GOLDEN_APPLE))) {
+                ((EntityDamageEvent) e).setCancelled(true);
+            }
 
         } else if(e instanceof PlayerDropItemEvent) {
             final PlayerDropItemEvent event = (PlayerDropItemEvent) e;
