@@ -4,3 +4,9 @@ main: fr.salers.teamfight.TeamFightPlugin
 authors: [ SalersFR ]
 depend:
   - Parties
+commands:
+  teamfight:
+    aliases:
+      - teamfight
+      - tfight
+

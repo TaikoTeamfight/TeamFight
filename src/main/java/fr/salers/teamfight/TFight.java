@@ -3,13 +3,17 @@ package fr.salers.teamfight;
 import com.alessiodp.parties.api.Parties;
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.samjakob.spigui.SpiGUI;
+import fr.salers.teamfight.command.TFCommand;
 import fr.salers.teamfight.listener.LogListener;
 import fr.salers.teamfight.listener.PlayerListener;
+import fr.salers.teamfight.manager.ArenaManager;
 import fr.salers.teamfight.manager.CustomConfigManager;
 import fr.salers.teamfight.manager.PlayerManager;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginManager;
+
+import java.util.Arrays;
 
 /**
  * @author Salers
@@ -45,6 +49,10 @@ public enum TFight {
 
         loadPartiesAPI(pluginManager);
 
+        ArenaManager.INSTANCE.loadFromConfig();
+
+        loadCommands();
+
     }
 
     public void disable() {
@@ -56,6 +64,13 @@ public enum TFight {
     private void loadPartiesAPI(final PluginManager pluginManager) {
         if (!pluginManager.getPlugin("Parties").isEnabled()) return;
         this.partiesAPI = Parties.getApi();
+
+    }
+
+    private void loadCommands() {
+        plugin.getCommand("teamfight").setExecutor(new TFCommand());
+        plugin.getCommand("teamfight").setAliases(Arrays.asList("tfight", "tf"));
+
 
     }
 }

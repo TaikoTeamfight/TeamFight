@@ -1,6 +1,8 @@
 package fr.salers.teamfight.player;
 
 import fr.salers.teamfight.TFight;
+import fr.salers.teamfight.arena.Arena;
+import fr.salers.teamfight.manager.ArenaManager;
 import fr.salers.teamfight.player.handler.AbstractHandler;
 import fr.salers.teamfight.player.handler.impl.BlockHandler;
 import fr.salers.teamfight.player.handler.impl.InteractHandler;
