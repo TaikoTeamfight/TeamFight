@@ -6,6 +6,7 @@ import com.samjakob.spigui.SpiGUI;
 import fr.salers.teamfight.command.TFCommand;
 import fr.salers.teamfight.listener.LogListener;
 import fr.salers.teamfight.listener.PlayerListener;
+import fr.salers.teamfight.listener.WorldListener;
 import fr.salers.teamfight.manager.ArenaManager;
 import fr.salers.teamfight.manager.CustomConfigManager;
 import fr.salers.teamfight.manager.PlayerManager;
@@ -46,7 +47,7 @@ public enum TFight {
 
         pluginManager.registerEvents(new LogListener(), this.plugin);
         pluginManager.registerEvents(new PlayerListener(), this.plugin);
-
+        pluginManager.registerEvents(new WorldListener(), this.plugin);
         loadPartiesAPI(pluginManager);
 
         ArenaManager.INSTANCE.loadFromConfig();

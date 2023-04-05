@@ -57,7 +57,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onDamage(final EntityDamageEvent event) {
-        if(!(event instanceof Player)) return;
+        if(!(event.getEntity() instanceof Player)) return;
         final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) event.getEntity());
         tfPlayer.handleEvent(event);
     }

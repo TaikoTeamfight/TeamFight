@@ -34,9 +34,16 @@ public class BlockHandler extends AbstractHandler {
             ((BlockPlaceEvent) e).setCancelled(tfPlayer.getPlayer().getGameMode() != GameMode.CREATIVE);
 
         } else if (e instanceof BlockBreakEvent) {
-            if (tfPlayer.getPlayer().getInventory().contains(Material.IRON_SWORD) && tfPlayer.getPlayer().getInventory().contains(Material.GOLDEN_APPLE)) {
-                ((BlockBreakEvent) e).setCancelled(tfPlayer.getPlayer().getGameMode() != GameMode.CREATIVE);
+            if (!tfPlayer.isFighting()) {
+                final boolean cancel = tfPlayer.getPlayer().getGameMode() != GameMode.CREATIVE;
+                ((BlockBreakEvent) e).setCancelled(cancel);
+            } else {
+                ((BlockBreakEvent) e).setCancelled(((BlockBreakEvent) e).getBlock().getType() != Material.SANDSTONE);
+
             }
+
+
+
 
         }
 

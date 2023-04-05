@@ -27,18 +27,6 @@ public class JoinHandler extends AbstractHandler {
         final Player player = ((PlayerJoinEvent) e).getPlayer();
 
         player.playSound(player.getLocation(), Sound.LEVEL_UP, 3F, 0.5F);
-        player.getInventory().clear();
-        player.setGameMode(GameMode.SURVIVAL);
-
-        player.sendMessage(CC.translate(
-                        "&a&lTaiko &r&7- &eTeamFight v1.0\n" +
-                                CC.getLineBreak("&7") +
-                                "&a/party &7Créez votre groupe pour en affronter d'autres." +
-                                CC.getLineBreak("&7")
-                )
-
-        );
-
-        QueueManager.INSTANCE.giveQueueItem(player);
+        tfPlayer.setToLobby();
     }
 }

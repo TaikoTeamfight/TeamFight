@@ -41,10 +41,15 @@ public class InteractHandler extends AbstractHandler {
         } else if(e instanceof EntityDamageEvent) {
             final ItemStack inHand = tfPlayer.getPlayer().getItemInHand();
 
-
-            if (!(tfPlayer.getPlayer().getInventory().contains(Material.IRON_SWORD) && tfPlayer.getPlayer().getInventory().contains(Material.GOLDEN_APPLE))) {
+            if (!tfPlayer.isFighting()) {
                 ((EntityDamageEvent) e).setCancelled(true);
+                return;
             }
+
+            if(((EntityDamageEvent) e).getDamage() - tfPlayer.getPlayer().getHealth() >= 0)
+                tfPlayer.getActiveFight().handleKill(tfPlayer.getPlayer());
+
+
 
         } else if(e instanceof PlayerDropItemEvent) {
             final PlayerDropItemEvent event = (PlayerDropItemEvent) e;
