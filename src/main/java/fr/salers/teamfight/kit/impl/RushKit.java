@@ -16,7 +16,7 @@ public class RushKit implements Kit {
     @Override
     public void giveToPlayer(Player player) {
         final ItemStack sword = new ItemBuilder(Material.IRON_SWORD)
-                .enchant(Enchantment.DAMAGE_ALL, 3).enchant(Enchantment.DURABILITY, 3).build();
+                .enchant(Enchantment.DAMAGE_ALL, 1).enchant(Enchantment.DURABILITY, 3).build();
         final ItemStack pickaxe = new ItemBuilder(Material.DIAMOND_PICKAXE).
                 enchant(Enchantment.DIG_SPEED, 3).enchant(Enchantment.DURABILITY, 3).build();
         final ItemStack gapples = new ItemBuilder(Material.GOLDEN_APPLE).amount(32).build();
@@ -24,7 +24,7 @@ public class RushKit implements Kit {
         final ItemStack helmet = new ItemBuilder(Material.IRON_HELMET)
                 .enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3).enchant(Enchantment.DURABILITY, 3).build();
         final ItemStack chestplate = new ItemBuilder(Material.DIAMOND_CHESTPLATE)
-                .enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3).enchant(Enchantment.DURABILITY, 3).build();
+                .enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4).enchant(Enchantment.DURABILITY, 3).build();
         final ItemStack leggings = new ItemBuilder(Material.IRON_LEGGINGS)
                 .enchant(Enchantment.PROTECTION_ENVIRONMENTAL, 3).enchant(Enchantment.DURABILITY, 3).build();
         final ItemStack boots = new ItemBuilder(Material.DIAMOND_BOOTS)
