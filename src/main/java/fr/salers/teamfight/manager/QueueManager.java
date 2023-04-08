@@ -86,12 +86,12 @@ public enum QueueManager {
         }
 
         for(PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
-            giveLeaveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
+            giveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
         }
 
         for(PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
-            giveLeaveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
+            giveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
         }
 
