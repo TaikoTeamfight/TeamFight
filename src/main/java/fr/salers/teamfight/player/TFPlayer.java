@@ -8,6 +8,7 @@ import fr.salers.teamfight.manager.ArenaManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.handler.AbstractHandler;
 import fr.salers.teamfight.player.handler.impl.*;
+import fr.salers.teamfight.player.state.PlayerState;
 import fr.salers.teamfight.utilities.CC;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,9 @@ public class TFPlayer {
     private final UUID uid;
     private final Player player;
 
+    @Getter @Setter
+    private PlayerState playerState;
+
     private final List<AbstractHandler> handlers;
 
     @Setter
@@ -42,6 +46,7 @@ public class TFPlayer {
     public TFPlayer(UUID uid) {
         this.uid = uid;
         this.player = Bukkit.getPlayer(uid);
+        this.playerState = PlayerState.SPAWN;
 
         this.handlers = Arrays.asList(
                 new InteractHandler(this),

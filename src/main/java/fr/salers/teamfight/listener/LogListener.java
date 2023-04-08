@@ -3,6 +3,8 @@ package fr.salers.teamfight.listener;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.config.Config;
 import fr.salers.teamfight.manager.PlayerManager;
+import fr.salers.teamfight.scoreboard.Board;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -16,12 +18,20 @@ public class LogListener implements Listener {
 
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
-        TFight.INSTANCE.getPlayerManager().add(event.getPlayer());
-        event.getPlayer().teleport(Config.getLobbyLocation());
+        Player player = event.getPlayer();
+        TFight.INSTANCE.getPlayerManager().add(player);
+        player.teleport(Config.getLobbyLocation());
+        if (TFight.INSTANCE.getBoardManager() != null) {
+            TFight.INSTANCE.getBoardManager().getPlayerBoards().put(player.getUniqueId(), new Board(player, TFight.INSTANCE.getBoardManager().getAdapter()));
+        }
     }
 
     @EventHandler
     public void onLeave(final PlayerQuitEvent event) {
-        TFight.INSTANCE.getPlayerManager().remove(event.getPlayer());
+        Player player = event.getPlayer();
+        TFight.INSTANCE.getPlayerManager().remove(player);
+        if (TFight.INSTANCE.getBoardManager() != null) {
+            TFight.INSTANCE.getBoardManager().getPlayerBoards().remove(player.getUniqueId());
+        }
     }
 }

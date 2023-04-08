@@ -10,9 +10,14 @@ import fr.salers.teamfight.listener.PlayerListener;
 import fr.salers.teamfight.listener.WorldListener;
 import fr.salers.teamfight.manager.ArenaManager;
 import fr.salers.teamfight.manager.CustomConfigManager;
+import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.PlayerManager;
+import fr.salers.teamfight.scoreboard.BoardAdapter;
+import fr.salers.teamfight.scoreboard.BoardManager;
+import fr.salers.teamfight.scoreboard.adapter.TeamfightBoard;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.Arrays;
@@ -31,6 +36,7 @@ public enum TFight {
     private SpiGUI spiGUI;
 
     private final PlayerManager playerManager = new PlayerManager();
+    private final BoardManager boardManager = new BoardManager(new TeamfightBoard());
 
 
     public void load(final TeamFightPlugin plugin) {
@@ -54,6 +60,8 @@ public enum TFight {
         ArenaManager.INSTANCE.loadFromConfig();
 
         loadCommands();
+        plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, (Runnable)this.boardManager, 1L, 1L);
+
 
     }
 

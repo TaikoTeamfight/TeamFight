@@ -1,11 +1,14 @@
 package fr.salers.teamfight.manager;
 
 import com.alessiodp.parties.api.interfaces.Party;
+import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import com.samjakob.spigui.SGMenu;
 import com.samjakob.spigui.buttons.SGButton;
 import com.samjakob.spigui.item.ItemBuilder;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.fight.Fight;
+import fr.salers.teamfight.player.TFPlayer;
+import fr.salers.teamfight.player.state.PlayerState;
 import fr.salers.teamfight.utilities.CC;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -37,6 +40,10 @@ public enum QueueManager {
                 player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &bajoutée à la queue."))
         );
 
+        for(PartyPlayer partyPlayer : party.getOnlineMembers()) {
+            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
+        }
+
         if (queuedParties.size() % 2 == 0)
             handlePossibleMatch();
     }
@@ -47,6 +54,11 @@ public enum QueueManager {
         party.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &cretirée de la queue.."))
         );
+
+        for(PartyPlayer partyPlayer : party.getOnlineMembers()) {
+            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
+        }
+
     }
 
     public boolean isInQueue(final Player player) {

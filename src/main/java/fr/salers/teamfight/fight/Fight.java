@@ -1,10 +1,12 @@
 package fr.salers.teamfight.fight;
 
 import com.alessiodp.parties.api.interfaces.Party;
+import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.arena.Arena;
 import fr.salers.teamfight.config.Config;
 import fr.salers.teamfight.manager.ArenaManager;
+import fr.salers.teamfight.player.state.PlayerState;
 import fr.salers.teamfight.utilities.CC;
 import lombok.Getter;
 import lombok.Setter;
@@ -44,6 +46,14 @@ public class Fight {
                 }
         );
 
+        for(PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
+            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.FIGHTING);
+        }
+
+        for(PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
+            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.FIGHTING);
+        }
+
         partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> {
                     player.teleport(arena.getSecondLocation());
@@ -72,6 +82,14 @@ public class Fight {
                     TFight.INSTANCE.getPlayerManager().get(player).setToLobby();
                 }
         );
+
+        for(PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
+            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
+        }
+
+        for(PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
+            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
+        }
     }
 
     public void handleWin(final boolean partyOneWon) {
