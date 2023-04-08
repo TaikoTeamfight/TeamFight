@@ -59,7 +59,7 @@ public class TFPlayer {
         );
 
         loadKit();
-        Bukkit.getScheduler().runTaskLater(TFight.INSTANCE.getPlugin(), () -> handleEvent(new PlayerJoinEvent(player, "")), 30L);
+        Bukkit.getScheduler().runTaskLater(TFight.INSTANCE.getPlugin(), () -> handleEvent(new PlayerJoinEvent(player, "")), 5L);
     }
 
     public void handleEvent(final Event event) {
