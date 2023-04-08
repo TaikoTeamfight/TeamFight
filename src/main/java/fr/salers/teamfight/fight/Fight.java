@@ -176,7 +176,7 @@ public class Fight {
         final boolean win = partyOneWins == 3 || partyTwoWins == 3;
 
         if(win) endMatch();
-        
+
         return win;
     }
 
@@ -187,22 +187,26 @@ public class Fight {
 
         partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> {
+                    player.setGameMode(GameMode.SURVIVAL);
                     player.teleport(arena.getSecondLocation());
                     player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + (partyTwoWins + partyOneWins)
                             + Bukkit.getPlayer(partyOne.getLeader()).getDisplayName() + " &7a commencé!"));
                     final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
                     player.getInventory().clear();
+                    player.setHealth(player.getMaxHealth());
                     tfPlayer.getRushKit().giveToPlayer(player);
                 }
         );
 
         partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> {
+                    player.setGameMode(GameMode.SURVIVAL);
                     player.teleport(arena.getSecondLocation());
                     player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + (partyTwoWins + partyOneWins)
                             + Bukkit.getPlayer(partyOne.getLeader()).getDisplayName() + " &7a commencé!"));
                     final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
                     player.getInventory().clear();
+                    player.setHealth(player.getMaxHealth());
                     tfPlayer.getRushKit().giveToPlayer(player);
                 }
         );
