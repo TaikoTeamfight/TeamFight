@@ -86,7 +86,7 @@ public enum QueueManager {
         }
 
         queuedParties.remove(0);
-        queuedParties.remove(1);
+        queuedParties.remove(0);
     }
 
     public void giveQueueItem(final Player player) {

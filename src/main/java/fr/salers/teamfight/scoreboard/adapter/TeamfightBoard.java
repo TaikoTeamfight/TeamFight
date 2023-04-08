@@ -79,7 +79,10 @@ public class TeamfightBoard implements BoardAdapter
             Party party = PartyManager.INSTANCE.getPartyFromPlayer(player);
             strings.add("");
             strings.add("&aParty:");
-            strings.add(" &aLeader: &e" + Bukkit.getPlayer(party.getLeader()).getDisplayName());
+
+            if(PartyManager.INSTANCE.getPlayersOnlineParty(party).contains(Bukkit.getPlayer(party.getLeader()))) {
+               strings.add(" &aLeader: &e" + Bukkit.getPlayer(party.getLeader()).getDisplayName());
+            }
 
             //Limite size always 5
 
