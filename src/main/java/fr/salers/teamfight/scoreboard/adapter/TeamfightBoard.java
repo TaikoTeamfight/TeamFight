@@ -1,38 +1,28 @@
 package fr.salers.teamfight.scoreboard.adapter;
 
 import com.alessiodp.parties.api.interfaces.Party;
-import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.TeamFightPlugin;
 import fr.salers.teamfight.fight.Fight;
 import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.PlayerManager;
 import fr.salers.teamfight.player.TFPlayer;
-import fr.salers.teamfight.player.state.PlayerState;
 import fr.salers.teamfight.scoreboard.Board;
 import fr.salers.teamfight.scoreboard.BoardAdapter;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-
-import fr.salers.teamfight.utilities.CC;
-import org.bukkit.scoreboard.Team;
-
-import java.util.ArrayList;
-import java.util.UUID;
-import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.Bukkit;
-import org.apache.commons.lang.StringUtils;
-import java.util.LinkedList;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
-public class TeamfightBoard implements BoardAdapter
-{
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+
+public class TeamfightBoard implements BoardAdapter {
     private static final String LINE;
     private final TeamFightPlugin plugin;
-    
+
     public TeamfightBoard() {
         this.plugin = TeamFightPlugin.getINSTANCE();
     }
@@ -80,15 +70,15 @@ public class TeamfightBoard implements BoardAdapter
             strings.add("");
             strings.add("&aParty:");
 
-            if(PartyManager.INSTANCE.getPlayersOnlineParty(party).contains(Bukkit.getPlayer(party.getLeader()))) {
-               strings.add(" &aLeader: &e" + Bukkit.getPlayer(party.getLeader()).getDisplayName());
+            if (PartyManager.INSTANCE.getPlayersOnlineParty(party).contains(Bukkit.getPlayer(party.getLeader()))) {
+                strings.add(" &aLeader: &e" + Bukkit.getPlayer(party.getLeader()).getDisplayName());
             }
 
             //Limite size always 5
 
             List<Player> players = PartyManager.INSTANCE.getPlayersOnlineParty(party);
             int size = players.size();
-            strings.add(" &aMembres: &8(" + size +")");
+            strings.add(" &aMembres: &8(" + size + ")");
             strings.add(" &aNom: &e" + party.getName());
         }
         if (queuing) {
@@ -101,7 +91,7 @@ public class TeamfightBoard implements BoardAdapter
         strings.add("&7&otaikoteamfight.com");
         return strings;
     }
-    
+
     @Override
     public void onScoreboardCreate(final Player player, final Scoreboard scoreboard) {
         Team red = scoreboard.getTeam("red");
@@ -145,12 +135,18 @@ public class TeamfightBoard implements BoardAdapter
 
     private List<String> getGameBoard(final Player player) {
         final List<String> strings = new LinkedList<String>();
-        Fight fight = null;
+        Fight fight = TFight.INSTANCE.getPlayerManager().get(player).getActiveFight();
+        final String[] data = fight.getScoreboardData(player);
         //Faire le scoreboard en fight
         strings.add(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------");
+        strings.addAll(Arrays.asList(data));
+        strings.add("");
+        strings.add(ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------");
+        strings.add("&7&otaikoteamfight.com");
+
         return strings;
     }
-    
+
     private List<String> getSpectatorBoard(final Player spectator) {
         final List<String> strings = new LinkedList<String>();
         //final Fight match = TFight.INSTANCE.getFightManager().getFight(player.getUniqueId()); -> Exemple de méthode
@@ -159,12 +155,12 @@ public class TeamfightBoard implements BoardAdapter
         return strings;
     }
 
-    
+
     @Override
     public long getInterval() {
         return 1L;
     }
-    
+
     static {
         LINE = ChatColor.GRAY.toString() + ChatColor.STRIKETHROUGH + "-------------------";
     }

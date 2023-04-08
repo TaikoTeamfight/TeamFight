@@ -32,13 +32,10 @@ public class TFPlayer {
 
     private final UUID uid;
     private final Player player;
-
+    private final List<AbstractHandler> handlers;
     @Getter
     @Setter
     private PlayerState playerState;
-
-    private final List<AbstractHandler> handlers;
-
     @Setter
     private Fight activeFight = null;
 
@@ -97,5 +94,6 @@ public class TFPlayer {
             QueueManager.INSTANCE.giveQueueItem(player);
         }
     }
+
 
 }

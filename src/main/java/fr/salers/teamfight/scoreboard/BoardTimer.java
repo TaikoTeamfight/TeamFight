@@ -3,7 +3,7 @@ package fr.salers.teamfight.scoreboard;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import java.text.DecimalFormat;
 
-public class BoardTimer
+public class    BoardTimer
 {
     private static final DecimalFormat SECONDS_FORMATTER;
     private final Board board;

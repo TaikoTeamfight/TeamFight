@@ -79,25 +79,25 @@ public class Fight {
 
         if (partyTwoWins == 3) {
 
-            partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+            partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
                         player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
                     }
             );
 
-            partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+            partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
                         player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
                     }
             );
         } else if (partyOneWins == 3) {
-            partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+            partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
                         player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
                     }
             );
 
-            partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+            partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
                         player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
                     }
@@ -132,6 +132,13 @@ public class Fight {
 
     public void handleWin(final boolean partyOneWon) {
         if (partyOneWon) {
+
+            if (partyTwo.getOnlineMembers().isEmpty()) {
+                partyOneWins = 3;
+                endMatch();
+                return;
+            }
+
             partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
                         player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" +
@@ -145,7 +152,15 @@ public class Fight {
                                 Bukkit.getPlayer(partyOne.getLeader()).getDisplayName() + " &7a gagné ce round!"));
                     }
             );
+
         } else {
+
+            if (partyOne.getOnlineMembers().isEmpty()) {
+                partyTwoWins = 3;
+                endMatch();
+                return;
+            }
+
             partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
                         player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" +
@@ -159,6 +174,8 @@ public class Fight {
                                 Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné ce round!"));
                     }
             );
+
+
         }
 
         if (partyOneWon)
@@ -228,11 +245,43 @@ public class Fight {
                 }
         );
 
+
         if (partyOne.getOnlineMembers().stream().noneMatch(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID()).getGameMode() == GameMode.SURVIVAL)) {
             handleWin(false);
         } else if (partyTwo.getOnlineMembers().stream().noneMatch(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID()).getGameMode() == GameMode.SURVIVAL)) {
             handleWin(true);
         }
+
+    }
+
+    public String[] getScoreboardData(final Player player) {
+        final boolean inPartyOne = partyOne.getOnlineMembers().stream().anyMatch(partyPlayer ->
+                Bukkit.getPlayer(partyPlayer.getPlayerUUID()).getDisplayName().equalsIgnoreCase(player.getDisplayName()));
+        final String ennemyTeam = "&eTeam Adverse: &a" + (inPartyOne ? partyTwo.getName() : partyOne.getName());
+        final int ennemyRounds = inPartyOne ? partyTwoWins : partyOneWins;
+        final long ennemies = !inPartyOne ?
+                partyTwo.getOnlineMembers().stream().map(partyPlayer ->
+                        Bukkit.getPlayer(partyPlayer.getPlayerUUID())).filter(player1 -> player1.getGameMode() == GameMode.SURVIVAL).count() :
+                partyOne.getOnlineMembers().stream().map(partyPlayer ->
+                        Bukkit.getPlayer(partyPlayer.getPlayerUUID())).filter(player1 -> player1.getGameMode() == GameMode.SURVIVAL).count();
+
+
+        final String ennemiesAlive = "   &eEn vie: &a(" + ennemies + "/5)&r";
+        final String ennemiesRound = "   &eRounds gagnés: &a(" + ennemyRounds + "/3)";
+
+        final String allyTeam = CC.translate("&eVotre Team :&a " + (!inPartyOne ? partyTwo.getName() : partyOne.getName()));
+        final int allyRounds = !inPartyOne ? partyTwoWins : partyOneWins;
+        final long allies = inPartyOne ?
+                partyOne.getOnlineMembers().stream().map(partyPlayer ->
+                        Bukkit.getPlayer(partyPlayer.getPlayerUUID())).filter(player1 -> player1.getGameMode() == GameMode.SURVIVAL).count() :
+                partyTwo.getOnlineMembers().stream().map(partyPlayer ->
+                        Bukkit.getPlayer(partyPlayer.getPlayerUUID())).filter(player1 -> player1.getGameMode() == GameMode.SURVIVAL).count();
+
+
+        final String alliesAlive = "   &eEn vie: &a(" + allies + "/5)";
+        final String alliesRound = "   &eRounds gagnés: &a(" + allyRounds + "/3)";
+        return new String[]{ennemyTeam, ennemiesAlive, ennemiesRound, allyTeam, alliesAlive, alliesRound};
+
 
     }
 
