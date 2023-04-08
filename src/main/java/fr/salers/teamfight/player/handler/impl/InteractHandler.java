@@ -32,6 +32,17 @@ public class InteractHandler extends AbstractHandler {
             if(inHand == null || !inHand.hasItemMeta()) return;
 
 
+            if(!QueueManager.INSTANCE.isInQueue(tfPlayer.getPlayer())) {
+                if(inHand.getItemMeta().getDisplayName().contains("Teamfight - Party")){
+                    QueueManager.INSTANCE.openQueueGUI(tfPlayer.getPlayer());
+                }
+            } else {
+                if(inHand.getItemMeta().getDisplayName().contains("Leave Queue")) {
+                    QueueManager.INSTANCE.remove(PartyManager.INSTANCE.getPartyFromPlayer(tfPlayer.getPlayer()));
+                }
+            }
+
+
             if(inHand.getItemMeta().getDisplayName().contains("Queue")) {
                 if(QueueManager.INSTANCE.isInQueue(tfPlayer.getPlayer()))
                     QueueManager.INSTANCE.remove(PartyManager.INSTANCE.getPartyFromPlayer(tfPlayer.getPlayer()));

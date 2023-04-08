@@ -72,9 +72,8 @@ public class TeamfightBoard implements BoardAdapter
     private List<String> getLobbyBoard(final Player player, final boolean queuing) {
         final List<String> strings = new LinkedList<String>();
         strings.add(TeamfightBoard.LINE);
-        strings.add("&eEn lignes: &a" + Bukkit.getOnlinePlayers().size());
-        //Fight manager, récuprer le nombre de player en fight
-        strings.add("&eEn Fight: &a" + "0");
+        strings.add("&eEn lignes: &a" + TeamfightCache.getPlayersOnline());
+        strings.add("&eEn Fight: &a" + TeamfightCache.getPlayersInMatch());
         final TFPlayer tfPlayer = new PlayerManager().get(player);
         if (PartyManager.INSTANCE.isInParty(player)) {
             Party party = PartyManager.INSTANCE.getPartyFromPlayer(player);

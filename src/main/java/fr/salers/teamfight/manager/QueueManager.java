@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemFlag;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Salers
@@ -40,7 +41,9 @@ public enum QueueManager {
                 player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &bajoutée à la queue."))
         );
 
+
         for(PartyPlayer partyPlayer : party.getOnlineMembers()) {
+            giveLeaveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
         }
 
@@ -55,7 +58,9 @@ public enum QueueManager {
                 player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &cretirée de la queue.."))
         );
 
+
         for(PartyPlayer partyPlayer : party.getOnlineMembers()) {
+            giveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
         }
 
@@ -85,8 +90,10 @@ public enum QueueManager {
     }
 
     public void giveQueueItem(final Player player) {
+        player.getInventory().clear();
+        player.updateInventory();
         final ItemBuilder item = new ItemBuilder(Material.GOLD_SWORD)
-                .name("&eQueue - Team Fight")
+                .name("&eTeamfight - Party")
                 .enchant(Enchantment.DAMAGE_ALL, 1)
                 .flag(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
 
@@ -95,16 +102,32 @@ public enum QueueManager {
 
     }
 
+    public void giveLeaveQueueItem(final Player player) {
+        player.getInventory().clear();
+        final ItemBuilder item = new ItemBuilder(Material.REDSTONE)
+                .name("&cLeave Queue")
+                .flag(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
+
+        player.getInventory().setItem(8, item.build());
+    }
+
     public void openQueueGUI(final Player player) {
+
+        if(!PartyManager.INSTANCE.isInParty(player)) {
+            player.sendMessage(CC.formatPrefixTranslate("&cVous devez être dans un groupe pour fare ceci."));
+            return;
+        }
+
+
+        if(!(PartyManager.INSTANCE.getPartyFromPlayer(player).getLeader().equals(player.getUniqueId()))) {
+            player.sendMessage(CC.translate("&cSeulement le leader peut lancer une partie !"));
+            return;
+        }
         final SGMenu gui = TFight.INSTANCE.getSpiGUI().create("&eQueue", 1);
         final SGButton kit = new SGButton(new ItemBuilder(Material.SANDSTONE).data((short) 2).name("&6Rush").build()).withListener(
                 (InventoryClickEvent event) -> {
                     player.closeInventory();
-                    if (PartyManager.INSTANCE.isInParty(player)) {
-                        add(PartyManager.INSTANCE.getPartyFromPlayer(player));
-                    } else {
-                        player.sendMessage(CC.formatPrefixTranslate("&cVous devez être dans un groupe pour fare ceci."));
-                    }
+                    add(PartyManager.INSTANCE.getPartyFromPlayer(player));
                 }
         );
 

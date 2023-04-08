@@ -80,9 +80,13 @@ public class TFPlayer {
                 )
 
         );
-
-        QueueManager.INSTANCE.giveQueueItem(player);
         player.teleport(Config.getLobbyLocation());
+
+        if(QueueManager.INSTANCE.isInQueue(player)) {
+            QueueManager.INSTANCE.giveLeaveQueueItem(player);
+        } else {
+            QueueManager.INSTANCE.giveQueueItem(player);
+        }
     }
 
 }
