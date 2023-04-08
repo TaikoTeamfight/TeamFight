@@ -187,7 +187,7 @@ public class Fight {
                 player -> {
                     player.setGameMode(GameMode.SURVIVAL);
                     player.teleport(arena.getFirstLocation());
-                    player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + (partyTwoWins + partyOneWins + 1) + " &7a commencé!"));
+                    player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + getRounds() + " &7a commencé!"));
                     final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
                     player.getInventory().clear();
                     player.setHealth(player.getMaxHealth());
@@ -199,7 +199,7 @@ public class Fight {
                 player -> {
                     player.setGameMode(GameMode.SURVIVAL);
                     player.teleport(arena.getSecondLocation());
-                    player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + (partyTwoWins + partyOneWins) + " &7a commencé!"));
+                    player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + getRounds() + " &7a commencé!"));
                     final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
                     player.getInventory().clear();
                     player.setHealth(player.getMaxHealth());
@@ -234,6 +234,10 @@ public class Fight {
             handleWin(true);
         }
 
+    }
+
+    public int getRounds() {
+        return partyOneWins + partyTwoWins + 1;
     }
 
 }
