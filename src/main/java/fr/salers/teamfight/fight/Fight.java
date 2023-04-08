@@ -5,6 +5,7 @@ import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.arena.Arena;
 import fr.salers.teamfight.manager.ArenaManager;
+import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.state.PlayerState;
 import fr.salers.teamfight.utilities.CC;
 import lombok.Getter;
@@ -40,8 +41,10 @@ public class Fight {
                     player.teleport(arena.getFirstLocation());
                     player.sendMessage(CC.formatPrefixTranslate("&7Votre match contre l'équipe de &e"
                             + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a commencé!"));
-                    TFight.INSTANCE.getPlayerManager().get(player).setActiveFight(this);
+                    final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+                    tfPlayer.setActiveFight(this);
                     player.getInventory().clear();
+                    tfPlayer.getRushKit().giveToPlayer(player);
                 }
         );
 
@@ -58,8 +61,10 @@ public class Fight {
                     player.teleport(arena.getSecondLocation());
                     player.sendMessage(CC.formatPrefixTranslate("&7Votre match contre l'équipe de &e"
                             + Bukkit.getPlayer(partyOne.getLeader()).getDisplayName() + " &7a commencé!"));
-                    TFight.INSTANCE.getPlayerManager().get(player).setActiveFight(this);
+                    final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+                    tfPlayer.setActiveFight(this);
                     player.getInventory().clear();
+                    tfPlayer.getRushKit().giveToPlayer(player);
                 }
         );
 
@@ -73,15 +78,17 @@ public class Fight {
 
         partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> {
-                    TFight.INSTANCE.getPlayerManager().get(player).setActiveFight(null);
-                    TFight.INSTANCE.getPlayerManager().get(player).setToLobby();
+                    final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+                    tfPlayer.setActiveFight(null);
+                    tfPlayer.setToLobby();
                 }
         );
 
         partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> {
-                    TFight.INSTANCE.getPlayerManager().get(player).setActiveFight(null);
-                    TFight.INSTANCE.getPlayerManager().get(player).setToLobby();
+                    final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+                    tfPlayer.setActiveFight(null);
+                    tfPlayer.setToLobby();
                 }
         );
 

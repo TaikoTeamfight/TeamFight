@@ -1,10 +1,10 @@
 package fr.salers.teamfight.player;
 
 import fr.salers.teamfight.TFight;
-import fr.salers.teamfight.arena.Arena;
 import fr.salers.teamfight.config.Config;
 import fr.salers.teamfight.fight.Fight;
-import fr.salers.teamfight.manager.ArenaManager;
+import fr.salers.teamfight.kit.Kit;
+import fr.salers.teamfight.kit.impl.RushKit;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.handler.AbstractHandler;
 import fr.salers.teamfight.player.handler.impl.*;
@@ -17,7 +17,6 @@ import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerJoinEvent;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -34,13 +33,16 @@ public class TFPlayer {
     private final UUID uid;
     private final Player player;
 
-    @Getter @Setter
+    @Getter
+    @Setter
     private PlayerState playerState;
 
     private final List<AbstractHandler> handlers;
 
     @Setter
     private Fight activeFight = null;
+
+    private Kit rushKit;
 
 
     public TFPlayer(UUID uid) {
@@ -56,7 +58,8 @@ public class TFPlayer {
                 new QuitHandler(this)
         );
 
-       Bukkit.getScheduler().runTaskLater(TFight.INSTANCE.getPlugin(),() ->  handleEvent(new PlayerJoinEvent(player, "")), 30L);
+        loadKit();
+        Bukkit.getScheduler().runTaskLater(TFight.INSTANCE.getPlugin(), () -> handleEvent(new PlayerJoinEvent(player, "")), 30L);
     }
 
     public void handleEvent(final Event event) {
@@ -65,6 +68,11 @@ public class TFPlayer {
 
     public boolean isFighting() {
         return activeFight != null;
+    }
+
+    private void loadKit() {
+        // TODO MAYBE KIT EDITOR SO LOAD FROM DB ???
+        this.rushKit = new RushKit();
     }
 
     public void setToLobby() {
@@ -82,7 +90,7 @@ public class TFPlayer {
         );
         player.teleport(Config.getLobbyLocation());
 
-        if(QueueManager.INSTANCE.isInQueue(player)) {
+        if (QueueManager.INSTANCE.isInQueue(player)) {
             QueueManager.INSTANCE.giveLeaveQueueItem(player);
         } else {
             QueueManager.INSTANCE.giveQueueItem(player);
