@@ -67,8 +67,8 @@ public enum QueueManager {
     }
 
     public void handlePossibleMatch() {
-        final Party partyOne = queuedParties.remove(0);
-        final Party partyTwo = queuedParties.remove(1);
+        final Party partyOne = queuedParties.get(0);
+        final Party partyTwo = queuedParties.get(1);
 
         if(ArenaManager.INSTANCE.peekNextArena() != null) {
             Fight fight = new Fight(partyOne, partyTwo);
@@ -80,6 +80,8 @@ public enum QueueManager {
                     player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &cretirée de la queue.. Aucune arène disponible.")) );
         }
 
+        queuedParties.remove(0);
+        queuedParties.remove(1);
     }
 
     public void giveQueueItem(final Player player) {
