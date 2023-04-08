@@ -83,16 +83,17 @@ public enum QueueManager {
                     player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &cretirée de la queue.. Aucune arène disponible.")));
             partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &cretirée de la queue.. Aucune arène disponible.")) );
-        }
 
-        for(PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
-            giveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
-            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
-        }
+            for(PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
+                giveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
+                TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
+            }
 
-        for(PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
-            giveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
-            TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
+            for(PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
+                giveQueueItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
+                TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
+            }
+
         }
 
         queuedParties.remove(0);
