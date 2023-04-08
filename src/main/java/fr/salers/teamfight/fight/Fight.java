@@ -4,7 +4,6 @@ import com.alessiodp.parties.api.interfaces.Party;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.arena.Arena;
-import fr.salers.teamfight.config.Config;
 import fr.salers.teamfight.manager.ArenaManager;
 import fr.salers.teamfight.player.state.PlayerState;
 import fr.salers.teamfight.utilities.CC;
@@ -46,11 +45,11 @@ public class Fight {
                 }
         );
 
-        for(PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
+        for (PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.FIGHTING);
         }
 
-        for(PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
+        for (PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.FIGHTING);
         }
 
@@ -67,7 +66,10 @@ public class Fight {
     }
 
     public void endMatch() {
-        ArenaManager.INSTANCE.getArenas().stream().filter(arena1 -> arena1.equals(arena)).findAny().get().setOccupied(false);
+
+        Bukkit.getScheduler().runTaskLaterAsynchronously(TFight.INSTANCE.getPlugin(),
+                () -> ArenaManager.INSTANCE.getArenas().stream().filter(arena1 -> arena1.equals(arena)).findAny().get().setOccupied(false)
+                , 20L * 12L);
 
         partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> {
@@ -83,17 +85,18 @@ public class Fight {
                 }
         );
 
-        for(PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
+        for (PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
         }
 
-        for(PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
+        for (PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
         }
+
     }
 
     public void handleWin(final boolean partyOneWon) {
-        if(partyOneWon) {
+        if (partyOneWon) {
             partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
                         player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
