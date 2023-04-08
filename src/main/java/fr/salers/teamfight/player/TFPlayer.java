@@ -78,6 +78,7 @@ public class TFPlayer {
     public void setToLobby() {
         player.getInventory().clear();
         player.setHealth(20.D);
+        player.getInventory().setArmorContents(null);
         player.setGameMode(GameMode.SURVIVAL);
 
         player.sendMessage(CC.translate(

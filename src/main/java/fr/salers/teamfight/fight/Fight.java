@@ -14,6 +14,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
+import javax.print.DocFlavor;
+
 /**
  * @author Salers
  * made on fr.salers.teamfight.fight
@@ -26,6 +28,7 @@ public class Fight {
     private final Party partyOne;
     private final Party partyTwo;
     private final Arena arena;
+    private int partyOneWins, partyTwoWins,
 
     public Fight(Party partyOne, Party partyTwo) {
         this.partyOne = partyOne;
@@ -76,6 +79,33 @@ public class Fight {
                 () -> ArenaManager.INSTANCE.getArenas().stream().filter(arena1 -> arena1.equals(arena)).findAny().get().setOccupied(false)
                 , 20L * 12L);
 
+        if(partyTwoWins == 3) {
+
+            partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+                    player -> {
+                        player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                    }
+            );
+
+            partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+                    player -> {
+                        player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                    }
+            );
+        } else if(partyOneWins == 3) {
+            partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+                    player -> {
+                        player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                    }
+            );
+
+            partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+                    player -> {
+                        player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                    }
+            );
+        }
+
         partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                 player -> {
                     final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
@@ -106,29 +136,77 @@ public class Fight {
         if (partyOneWon) {
             partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
-                        player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                        player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" +
+                                Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné ce round!"));
                     }
             );
 
             partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
-                        player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                        player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" +
+                                Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné ce round!"));
                     }
             );
         } else {
             partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
-                        player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                        player.sendMessage(CC.formatPrefixTranslate("&a&lVICTOIRE !&7 l'équipe de &e" +
+                                Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné ce round!"));
                     }
             );
 
             partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> {
-                        player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" + Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné!"));
+                        player.sendMessage(CC.formatPrefixTranslate("&c&lPERDU !&7 l'équipe de &e" +
+                                Bukkit.getPlayer(partyTwo.getLeader()).getDisplayName() + " &7a gagné ce round!"));
                     }
             );
         }
-        endMatch();
+
+        if(partyOneWon)
+            partyOneWins++;
+        else partyTwoWins++;
+
+        endRound();
+
+
+    }
+
+    private boolean handleFinalWin() {
+        final boolean win = partyOneWins == 3 || partyTwoWins == 3;
+
+        if(win) endMatch();
+        
+        return win;
+    }
+
+
+    private void endRound() {
+
+        if(handleFinalWin()) return;
+
+        partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+                player -> {
+                    player.teleport(arena.getSecondLocation());
+                    player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + (partyTwoWins + partyOneWins)
+                            + Bukkit.getPlayer(partyOne.getLeader()).getDisplayName() + " &7a commencé!"));
+                    final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+                    player.getInventory().clear();
+                    tfPlayer.getRushKit().giveToPlayer(player);
+                }
+        );
+
+        partyTwo.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
+                player -> {
+                    player.teleport(arena.getSecondLocation());
+                    player.sendMessage(CC.formatPrefixTranslate("&7Le round&e " + (partyTwoWins + partyOneWins)
+                            + Bukkit.getPlayer(partyOne.getLeader()).getDisplayName() + " &7a commencé!"));
+                    final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+                    player.getInventory().clear();
+                    tfPlayer.getRushKit().giveToPlayer(player);
+                }
+        );
+
 
     }
 
