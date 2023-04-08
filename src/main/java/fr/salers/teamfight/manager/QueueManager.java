@@ -44,7 +44,7 @@ public enum QueueManager {
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.QUEUE);
         }
 
-        if (queuedParties.size() % 2 == 0)
+        if (queuedParties.size() % 2 == 0 && queuedParties.size() > 1)
             handlePossibleMatch();
     }
 
