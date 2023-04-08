@@ -4,6 +4,7 @@ import com.alessiodp.parties.api.Parties;
 import com.alessiodp.parties.api.interfaces.PartiesAPI;
 import com.samjakob.spigui.SpiGUI;
 import fr.salers.teamfight.command.TFCommand;
+import fr.salers.teamfight.command.management.SetSpawnCommand;
 import fr.salers.teamfight.listener.LogListener;
 import fr.salers.teamfight.listener.PlayerListener;
 import fr.salers.teamfight.listener.WorldListener;
@@ -71,6 +72,7 @@ public enum TFight {
     private void loadCommands() {
         plugin.getCommand("teamfight").setExecutor(new TFCommand());
         plugin.getCommand("teamfight").setAliases(Arrays.asList("tfight", "tf"));
+        plugin.getCommand("setspawn").setExecutor(new SetSpawnCommand());
 
 
     }
