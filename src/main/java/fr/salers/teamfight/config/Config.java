@@ -38,7 +38,9 @@ public enum Config {
                 Bukkit.getWorld(config.getString("teamfight.lobby.world")),
                 config.getDouble("teamfight.lobby.x"),
                 config.getDouble("teamfight.lobby.y"),
-                config.getDouble("teamfight.lobby.z")
+                config.getDouble("teamfight.lobby.z"),
+                (float) config.getDouble("teamfight.lobby.yaw"),
+                (float) config.getDouble("teamfight.lobby.pitch")
 
         );
 
