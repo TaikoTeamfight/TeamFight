@@ -51,7 +51,7 @@ public class InteractHandler extends AbstractHandler {
             }
 
             if(tfPlayer.getPlayerState() == PlayerState.SPAWN) {
-                if(inHand.getItemMeta().getDisplayName().contains("Observer"))
+                if(inHand.getItemMeta().getDisplayName().contains("Regarder"))
                     FightManager.INSTANCE.openSpecGUI(tfPlayer);
             }
 

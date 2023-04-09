@@ -246,6 +246,13 @@ public class ItemBuilder {
         return this;
     }
 
+    public ItemBuilder unbreakable(final boolean v) {
+        ItemMeta meta = stack.getItemMeta();
+        meta.spigot().setUnbreakable(v);
+        stack.setItemMeta(meta);
+        return this;
+    }
+
     /**
      * Removes the specified enchantment from the stack.
      *

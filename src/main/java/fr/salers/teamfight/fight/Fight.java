@@ -127,6 +127,8 @@ public class Fight {
                 }
         );
 
+
+
         spectators.forEach(spectator -> {
             spectator.setPlayerState(PlayerState.SPAWN);
             spectator.setToLobby();

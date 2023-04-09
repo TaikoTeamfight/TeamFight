@@ -117,6 +117,7 @@ public enum QueueManager {
         final ItemBuilder item = new ItemBuilder(Material.GOLD_SWORD)
                 .name("&eTeamfight - Party")
                 .enchant(Enchantment.DAMAGE_ALL, 1)
+                .unbreakable(true)
                 .flag(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
 
 
