@@ -48,7 +48,7 @@ public class Arena {
         CustomConfigManager.INSTANCE.getArenaConfig().set("arenas." + name + ".pos2." + ".x", secondLocation.getX());
         CustomConfigManager.INSTANCE.getArenaConfig().set("arenas." + name + ".pos2." + ".y", secondLocation.getY());
         CustomConfigManager.INSTANCE.getArenaConfig().set("arenas." + name + ".pos2." + ".z", secondLocation.getZ());
-        CustomConfigManager.INSTANCE.getArenaConfig().set("arenas." + name + ".pos2." + ".z", secondLocation.getYaw());
+        CustomConfigManager.INSTANCE.getArenaConfig().set("arenas." + name + ".pos2." + ".yaw", secondLocation.getYaw());
 
         save();
 
