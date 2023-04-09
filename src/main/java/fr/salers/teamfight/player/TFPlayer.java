@@ -6,6 +6,7 @@ import fr.salers.teamfight.config.Config;
 import fr.salers.teamfight.fight.Fight;
 import fr.salers.teamfight.kit.Kit;
 import fr.salers.teamfight.kit.impl.RushKit;
+import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.manager.SplitPartyManager;
@@ -81,6 +82,7 @@ public class TFPlayer {
         player.setHealth(20.D);
         player.getInventory().setArmorContents(null);
         player.setGameMode(GameMode.SURVIVAL);
+        FightManager.INSTANCE.giveSpecItem(player);
 
         player.sendMessage(CC.translate(
                         "&a&lTaiko &r&7- &eTeamFight v1.0\n" +
