@@ -2,12 +2,14 @@ package fr.salers.teamfight.listener;
 
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.player.TFPlayer;
+import fr.salers.teamfight.player.state.PlayerState;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -60,6 +62,21 @@ public class PlayerListener implements Listener {
         if(!(event.getEntity() instanceof Player)) return;
         final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) event.getEntity());
         tfPlayer.handleEvent(event);
+    }
+
+    @EventHandler
+    public void onHungerLoos(FoodLevelChangeEvent e) {
+        if(!(e.getEntity() instanceof Player)) {
+            return;
+        }
+        Player player = (Player) e.getEntity();
+        final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) player);
+        if(tfPlayer.getPlayerState() != PlayerState.SPAWN) {
+            return;
+        } else {
+            e.setFoodLevel(20);
+        }
+
     }
 
 }
