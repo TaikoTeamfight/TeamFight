@@ -35,6 +35,12 @@ public enum QueueManager {
     private final List<Party> queuedParties = new ArrayList<>();
 
     public void add(final Party party) {
+
+        if(party.getOnlineMembers().size() > 5) {
+            Bukkit.getPlayer(party.getLeader()).sendMessage(CC.formatPrefixTranslate("&cVous êtes plus que 5 !"));
+            return;
+        }
+
         if (!queuedParties.contains(party)) queuedParties.add(party);
 
         party.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
