@@ -7,6 +7,7 @@ import com.alessiodp.parties.api.interfaces.Party;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.fight.sub.SplitParty;
+import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.state.PlayerState;
@@ -73,8 +74,10 @@ public class PartieListener implements Listener {
                 QueueManager.INSTANCE.remove(party);
                 leader.getInventory().clear();
                 QueueManager.INSTANCE.giveQueueItem(leader);
+                FightManager.INSTANCE.giveSpecItem(leader);
             } else {
                 QueueManager.INSTANCE.giveQueueItem(leader);
+                FightManager.INSTANCE.giveSpecItem(leader);
             }
         }
 
