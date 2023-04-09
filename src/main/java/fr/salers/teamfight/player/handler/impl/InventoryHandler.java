@@ -1,5 +1,6 @@
 package fr.salers.teamfight.player.handler.impl;
 
+import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.handler.AbstractHandler;
 import org.bukkit.event.Event;
@@ -32,6 +33,9 @@ public class InventoryHandler extends AbstractHandler {
 
             if(shouldCancel)
                 event.setCancelled(true);
+
+            if(shouldCancel && clicked.getItemMeta().getDisplayName().contains("spectateur"))
+                FightManager.INSTANCE.leaveSpectator(tfPlayer);
 
 
         }
