@@ -82,7 +82,6 @@ public class TFPlayer {
         player.setHealth(20.D);
         player.getInventory().setArmorContents(null);
         player.setGameMode(GameMode.SURVIVAL);
-        FightManager.INSTANCE.giveSpecItem(player);
 
         player.sendMessage(CC.translate(
                         "&a&lTaiko &r&7- &eTeamFight v1.0\n" +
@@ -94,19 +93,24 @@ public class TFPlayer {
         );
         player.teleport(Config.getLobbyLocation());
 
+
+        FightManager.INSTANCE.giveSpecItem(player);
         if (PartyManager.INSTANCE.isInParty(player)) {
             Party party = PartyManager.INSTANCE.getPartyFromPlayer(player);
             if (Bukkit.getPlayer(party.getLeader()) == player) {
                 QueueManager.INSTANCE.giveQueueItem(player);
+                FightManager.INSTANCE.giveSpecItem(player);
                 if (party.getOnlineMembers().size() > 1) {
                     TFight.INSTANCE.getSplitPartyManager().giveSplitPartyItems(player);
                 }
             } else {
                 QueueManager.INSTANCE.giveQueueItem(player);
+                FightManager.INSTANCE.giveSpecItem(player);
             }
 
         } else {
             QueueManager.INSTANCE.giveQueueItem(player);
+            FightManager.INSTANCE.giveSpecItem(player);
         }
     }
 }

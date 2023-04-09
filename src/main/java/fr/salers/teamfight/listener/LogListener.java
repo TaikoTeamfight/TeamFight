@@ -3,6 +3,7 @@ package fr.salers.teamfight.listener;
 import com.alessiodp.parties.api.interfaces.Party;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.config.Config;
+import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.PlayerManager;
 import fr.salers.teamfight.manager.QueueManager;
@@ -35,6 +36,7 @@ public class LogListener implements Listener {
                 TFight.INSTANCE.getSplitPartyManager().giveSplitPartyItems(leader);
             }
         }
+        FightManager.INSTANCE.giveSpecItem(player);
         if (TFight.INSTANCE.getBoardManager() != null) {
             TFight.INSTANCE.getBoardManager().getPlayerBoards().put(player.getUniqueId(), new Board(player, TFight.INSTANCE.getBoardManager().getAdapter()));
         }
@@ -55,10 +57,12 @@ public class LogListener implements Listener {
                     QueueManager.INSTANCE.remove(party);
                     leader.getInventory().clear();
                     QueueManager.INSTANCE.giveQueueItem(leader);
+                    FightManager.INSTANCE.giveSpecItem(leader);
                 }
                 leader.sendMessage("Vous pouvez plus Split Party");
                 leader.getInventory().clear();
                 QueueManager.INSTANCE.giveQueueItem(leader);
+                FightManager.INSTANCE.giveSpecItem(leader);
             }
         }
 
