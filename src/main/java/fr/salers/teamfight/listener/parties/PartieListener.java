@@ -26,6 +26,9 @@ public class PartieListener implements Listener {
         PartyPlayer partyPlayer = event.getPartyPlayer();
         Party party = event.getParty();
         Player player = Bukkit.getPlayer(partyPlayer.getPlayerUUID());
+        if(TFight.INSTANCE.getPlayerManager().get(player).getPlayerState() == PlayerState.FIGHTING) {
+            return;
+        }
         TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
         List<Player> partiesPlayer = new ArrayList<>();
         List<TFPlayer> tfPlayerList = new ArrayList<>();
@@ -62,6 +65,10 @@ public class PartieListener implements Listener {
         Party party = event.getParty();
         Player player = Bukkit.getPlayer(partyPlayer.getPlayerUUID());
         TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+
+        if(TFight.INSTANCE.getPlayerManager().get(player).getPlayerState() == PlayerState.FIGHTING) {
+            return;
+        }
 
         System.out.println("Partis size :" + party.getOnlineMembers().size());
         if(party.getOnlineMembers().size() < 2) {

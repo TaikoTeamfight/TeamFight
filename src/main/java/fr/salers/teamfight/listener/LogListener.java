@@ -8,6 +8,8 @@ import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.PlayerManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.scoreboard.Board;
+import fr.salers.teamfight.utilities.nametags.NametagException;
+import fr.salers.teamfight.utilities.nametags.PlayerNametag;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,6 +28,11 @@ public class LogListener implements Listener {
         Player player = event.getPlayer();
         TFight.INSTANCE.getPlayerManager().add(player);
         player.teleport(Config.getLobbyLocation());
+        try {
+           TFight.INSTANCE.getNametag().getNametagHandler().setNametag(event.getPlayer(), Bukkit.getScoreboardManager().getMainScoreboard(), new PlayerNametag("&5Test", event.getPlayer().getName(), null));
+        } catch (NametagException e1) {
+            e1.printStackTrace();
+        }
         if(PartyManager.INSTANCE.isInParty(player)) {
             Party party = PartyManager.INSTANCE.getPartyFromPlayer(player);
             int size = party.getOnlineMembers().size();
@@ -46,6 +53,8 @@ public class LogListener implements Listener {
     public void onLeave(final PlayerQuitEvent event) {
         Player player = event.getPlayer();
         TFight.INSTANCE.getPlayerManager().remove(player);
+
+
 
         if(PartyManager.INSTANCE.isInParty(player)) {
             Party party = PartyManager.INSTANCE.getPartyFromPlayer(player);
