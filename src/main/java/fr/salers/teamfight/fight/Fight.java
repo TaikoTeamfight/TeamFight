@@ -5,6 +5,7 @@ import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.arena.Arena;
 import fr.salers.teamfight.manager.ArenaManager;
+import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.state.PlayerState;
 import fr.salers.teamfight.utilities.CC;
@@ -13,6 +14,9 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Salers
@@ -27,6 +31,9 @@ public class Fight {
     private final Party partyTwo;
     private final Arena arena;
     private int partyOneWins, partyTwoWins;
+
+    @Getter
+    private final List<TFPlayer> spectators = new ArrayList<>();
 
     public Fight(Party partyOne, Party partyTwo) {
         this.partyOne = partyOne;
@@ -120,6 +127,11 @@ public class Fight {
                 }
         );
 
+        spectators.forEach(spectator -> {
+            spectator.setPlayerState(PlayerState.SPAWN);
+            spectator.setToLobby();
+        });
+
         for (PartyPlayer partyPlayer : partyOne.getOnlineMembers()) {
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
         }
@@ -127,6 +139,8 @@ public class Fight {
         for (PartyPlayer partyPlayer : partyTwo.getOnlineMembers()) {
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);
         }
+
+        FightManager.INSTANCE.deleteFight(this);
 
     }
 

@@ -1,9 +1,11 @@
 package fr.salers.teamfight.player.handler.impl;
 
+import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.handler.AbstractHandler;
+import fr.salers.teamfight.player.state.PlayerState;
 import org.bukkit.Material;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
@@ -40,6 +42,17 @@ public class InteractHandler extends AbstractHandler {
                 if(inHand.getItemMeta().getDisplayName().contains("Leave Queue")) {
                     QueueManager.INSTANCE.remove(PartyManager.INSTANCE.getPartyFromPlayer(tfPlayer.getPlayer()));
                 }
+            }
+
+            if(tfPlayer.getPlayerState() == PlayerState.SPECTATING) {
+                if(inHand.getItemMeta().getDisplayName().contains("Quitter") && inHand.getType() == Material.WOODEN_DOOR) {
+                    FightManager.INSTANCE.leaveSpectator(tfPlayer);
+                }
+            }
+
+            if(tfPlayer.getPlayerState() == PlayerState.SPAWN) {
+                if(inHand.getItemMeta().getDisplayName().contains("Observer"))
+                    FightManager.INSTANCE.openSpecGUI(tfPlayer);
             }
 
 

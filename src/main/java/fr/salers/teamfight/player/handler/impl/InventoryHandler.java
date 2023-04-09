@@ -21,12 +21,13 @@ public class InventoryHandler extends AbstractHandler {
         if (e instanceof InventoryClickEvent) {
             final InventoryClickEvent event = (InventoryClickEvent) e;
 
-
             if (event.getCurrentItem() == null || !event.getCurrentItem().hasItemMeta()) return;
 
             final ItemStack clicked = event.getCurrentItem();
 
-            final boolean shouldCancel = clicked.getItemMeta().getDisplayName().contains("Queue") || clicked.getItemMeta().getDisplayName().contains("Teamfight - Party");
+            final boolean shouldCancel = clicked.getItemMeta().getDisplayName().contains("Queue") ||
+                    clicked.getItemMeta().getDisplayName().contains("Teamfight - Party") || clicked.getItemMeta().getDisplayName().contains("Regarder") ||
+                    clicked.getItemMeta().getDisplayName().contains("Quitter");
 
             if(shouldCancel)
                 event.setCancelled(true);

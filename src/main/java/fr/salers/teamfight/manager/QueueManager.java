@@ -76,8 +76,7 @@ public enum QueueManager {
         final Party partyTwo = queuedParties.get(1);
 
         if(ArenaManager.INSTANCE.peekNextArena() != null) {
-            Fight fight = new Fight(partyOne, partyTwo);
-            fight.startMatch();
+            FightManager.INSTANCE.startFight(partyOne, partyTwo);
         } else {
             partyOne.getOnlineMembers().stream().map(partyPlayer -> Bukkit.getPlayer(partyPlayer.getPlayerUUID())).forEach(
                     player -> player.sendMessage(CC.formatPrefixTranslate("&7Votre équipe a été &cretirée de la queue.. Aucune arène disponible.")));
