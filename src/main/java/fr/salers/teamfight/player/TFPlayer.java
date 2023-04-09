@@ -1,11 +1,14 @@
 package fr.salers.teamfight.player;
 
+import com.alessiodp.parties.api.interfaces.Party;
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.config.Config;
 import fr.salers.teamfight.fight.Fight;
 import fr.salers.teamfight.kit.Kit;
 import fr.salers.teamfight.kit.impl.RushKit;
+import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.QueueManager;
+import fr.salers.teamfight.manager.SplitPartyManager;
 import fr.salers.teamfight.player.handler.AbstractHandler;
 import fr.salers.teamfight.player.handler.impl.*;
 import fr.salers.teamfight.player.state.PlayerState;
@@ -89,12 +92,19 @@ public class TFPlayer {
         );
         player.teleport(Config.getLobbyLocation());
 
-        if (QueueManager.INSTANCE.isInQueue(player)) {
-            QueueManager.INSTANCE.giveLeaveQueueItem(player);
+        if (PartyManager.INSTANCE.isInParty(player)) {
+            Party party = PartyManager.INSTANCE.getPartyFromPlayer(player);
+            if (Bukkit.getPlayer(party.getLeader()) == player) {
+                QueueManager.INSTANCE.giveQueueItem(player);
+                if (party.getOnlineMembers().size() > 1) {
+                    TFight.INSTANCE.getSplitPartyManager().giveSplitPartyItems(player);
+                }
+            } else {
+                QueueManager.INSTANCE.giveQueueItem(player);
+            }
+
         } else {
             QueueManager.INSTANCE.giveQueueItem(player);
         }
     }
-
-
 }

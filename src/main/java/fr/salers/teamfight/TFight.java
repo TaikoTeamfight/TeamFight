@@ -8,10 +8,8 @@ import fr.salers.teamfight.command.management.SetSpawnCommand;
 import fr.salers.teamfight.listener.LogListener;
 import fr.salers.teamfight.listener.PlayerListener;
 import fr.salers.teamfight.listener.WorldListener;
-import fr.salers.teamfight.manager.ArenaManager;
-import fr.salers.teamfight.manager.CustomConfigManager;
-import fr.salers.teamfight.manager.PartyManager;
-import fr.salers.teamfight.manager.PlayerManager;
+import fr.salers.teamfight.listener.parties.PartieListener;
+import fr.salers.teamfight.manager.*;
 import fr.salers.teamfight.scoreboard.BoardAdapter;
 import fr.salers.teamfight.scoreboard.BoardManager;
 import fr.salers.teamfight.scoreboard.adapter.TeamfightBoard;
@@ -36,6 +34,7 @@ public enum TFight {
     private SpiGUI spiGUI;
 
     private final PlayerManager playerManager = new PlayerManager();
+    private final SplitPartyManager splitPartyManager = new SplitPartyManager();
     private final BoardManager boardManager = new BoardManager(new TeamfightBoard());
 
 
@@ -55,6 +54,7 @@ public enum TFight {
         pluginManager.registerEvents(new LogListener(), this.plugin);
         pluginManager.registerEvents(new PlayerListener(), this.plugin);
         pluginManager.registerEvents(new WorldListener(), this.plugin);
+        pluginManager.registerEvents(new PartieListener(), this.plugin);
         loadPartiesAPI(pluginManager);
 
         ArenaManager.INSTANCE.loadFromConfig();

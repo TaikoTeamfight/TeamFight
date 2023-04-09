@@ -28,6 +28,7 @@ public class InventoryHandler extends AbstractHandler {
             final boolean shouldCancel = clicked.getItemMeta().getDisplayName().contains("Queue") ||
                     clicked.getItemMeta().getDisplayName().contains("Teamfight - Party") || clicked.getItemMeta().getDisplayName().contains("Regarder") ||
                     clicked.getItemMeta().getDisplayName().contains("Quitter");
+                    clicked.getItemMeta().getDisplayName().contains("Split Party");
 
             if(shouldCancel)
                 event.setCancelled(true);
