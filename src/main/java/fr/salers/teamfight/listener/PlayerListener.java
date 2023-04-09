@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -54,6 +55,13 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onBlockPlace(final BlockPlaceEvent event) {
         final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) event.getPlayer());
+        tfPlayer.handleEvent(event);
+    }
+
+    @EventHandler
+    public void onAttack(final EntityDamageByEntityEvent event) {
+        if(!(event.getDamager() instanceof Player)) return;
+        final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) event.getDamager());
         tfPlayer.handleEvent(event);
     }
 
