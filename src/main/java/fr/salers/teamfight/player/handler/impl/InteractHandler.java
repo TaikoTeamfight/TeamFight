@@ -31,7 +31,7 @@ public class InteractHandler extends AbstractHandler {
             if(((PlayerInteractEvent) e).getAction() == Action.PHYSICAL) return;
             final ItemStack inHand = tfPlayer.getPlayer().getItemInHand();
 
-            if(inHand == null || !inHand.hasItemMeta()) return;
+            if(inHand == null || !inHand.hasItemMeta() || inHand.getItemMeta().getDisplayName() == null) return;
 
 
             if(!QueueManager.INSTANCE.isInQueue(tfPlayer.getPlayer())) {
@@ -64,7 +64,7 @@ public class InteractHandler extends AbstractHandler {
                 return;
             }
 
-            if(((EntityDamageEvent) e).getDamage() - tfPlayer.getPlayer().getHealth() >= 0)
+            if(((EntityDamageEvent) e).getFinalDamage() - tfPlayer.getPlayer().getHealth() >= 0)
                 tfPlayer.getActiveFight().handleKill(tfPlayer.getPlayer());
 
 

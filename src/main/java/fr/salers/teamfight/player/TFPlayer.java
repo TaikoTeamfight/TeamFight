@@ -82,6 +82,7 @@ public class TFPlayer {
         player.setHealth(20.D);
         player.getInventory().setArmorContents(null);
         player.setGameMode(GameMode.SURVIVAL);
+        player.getActivePotionEffects().clear();
 
         player.sendMessage(CC.translate(
                         "&a&lTaiko &r&7- &eTeamFight v1.0\n" +

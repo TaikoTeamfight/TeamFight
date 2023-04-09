@@ -224,6 +224,7 @@ public class Fight {
                     final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
                     player.getInventory().clear();
                     player.setHealth(player.getMaxHealth());
+                    player.getActivePotionEffects().clear();
                     tfPlayer.getRushKit().giveToPlayer(player);
                 }
         );
@@ -236,6 +237,7 @@ public class Fight {
                     final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
                     player.getInventory().clear();
                     player.setHealth(player.getMaxHealth());
+                    player.getActivePotionEffects().clear();
                     tfPlayer.getRushKit().giveToPlayer(player);
                 }
         );
