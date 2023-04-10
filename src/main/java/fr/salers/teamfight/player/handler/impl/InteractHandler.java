@@ -65,7 +65,7 @@ public class InteractHandler extends AbstractHandler {
             final Player target = (Player) event.getEntity();
 
             // TODO CHECK IF NOT IN PARTY SPLIT
-            if (PartyManager.INSTANCE.isInParty(tfPlayer.getPlayer())) {
+            if (PartyManager.INSTANCE.isInParty(tfPlayer.getPlayer()) && tfPlayer.isFighting()) {
                 event.setCancelled(PartyManager.INSTANCE.getPlayersOnlineParty(PartyManager.INSTANCE.getPartyFromPlayer(tfPlayer.getPlayer())
                 ).stream().anyMatch(player -> player.getUniqueId().equals(target.getUniqueId())));
             }
