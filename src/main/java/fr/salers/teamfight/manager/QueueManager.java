@@ -72,7 +72,6 @@ public enum QueueManager {
                 if(party.getOnlineMembers().size() > 1) {
                     Bukkit.getPlayer(partyPlayer.getPlayerUUID()).sendMessage("Giving split party items");
                     TFight.INSTANCE.getSplitPartyManager().giveSplitPartyItems(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
-                    FightManager.INSTANCE.giveSpecItem(Bukkit.getPlayer(partyPlayer.getPlayerUUID()));
                 }
             }
             TFight.INSTANCE.getPlayerManager().get(Bukkit.getPlayer(partyPlayer.getPlayerUUID())).setPlayerState(PlayerState.SPAWN);

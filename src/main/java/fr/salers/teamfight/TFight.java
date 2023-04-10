@@ -10,13 +10,10 @@ import fr.salers.teamfight.listener.PlayerListener;
 import fr.salers.teamfight.listener.WorldListener;
 import fr.salers.teamfight.listener.parties.PartieListener;
 import fr.salers.teamfight.manager.*;
-import fr.salers.teamfight.scoreboard.BoardAdapter;
 import fr.salers.teamfight.scoreboard.BoardManager;
 import fr.salers.teamfight.scoreboard.adapter.TeamfightBoard;
-import fr.salers.teamfight.utilities.nametags.Nametag;
 import lombok.Getter;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
 import java.util.Arrays;
@@ -33,7 +30,6 @@ public enum TFight {
     private PartiesAPI partiesAPI;
     private TeamFightPlugin plugin;
     private SpiGUI spiGUI;
-    private Nametag nametag;
 
     private final PlayerManager playerManager = new PlayerManager();
     private final SplitPartyManager splitPartyManager = new SplitPartyManager();
@@ -58,7 +54,6 @@ public enum TFight {
         pluginManager.registerEvents(new WorldListener(), this.plugin);
         pluginManager.registerEvents(new PartieListener(), this.plugin);
         loadPartiesAPI(pluginManager);
-        nametag = new Nametag(this.plugin);
 
         ArenaManager.INSTANCE.loadFromConfig();
 

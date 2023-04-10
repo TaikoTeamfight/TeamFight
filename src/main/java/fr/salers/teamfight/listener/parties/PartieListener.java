@@ -1,23 +1,29 @@
 package fr.salers.teamfight.listener.parties;
 
+import com.alessiodp.parties.api.events.bukkit.party.BukkitPartiesPartyPreDeleteEvent;
 import com.alessiodp.parties.api.events.bukkit.player.BukkitPartiesPlayerPostLeaveEvent;
 import com.alessiodp.parties.api.events.bukkit.player.BukkitPartiesPlayerPreJoinEvent;
 import com.alessiodp.parties.api.events.bukkit.player.BukkitPartiesPlayerPreLeaveEvent;
 import com.alessiodp.parties.api.interfaces.Party;
 import com.alessiodp.parties.api.interfaces.PartyPlayer;
 import fr.salers.teamfight.TFight;
+import fr.salers.teamfight.TeamFightPlugin;
 import fr.salers.teamfight.fight.sub.SplitParty;
+import fr.salers.teamfight.manager.ArenaManager;
 import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.state.PlayerState;
+import fr.salers.teamfight.utilities.nametags.NameTags;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class PartieListener implements Listener {
 
@@ -46,7 +52,12 @@ public class PartieListener implements Listener {
             }
         }
 
+
         Player leader = Bukkit.getPlayer(party.getLeader());
+
+        NameTags.color(player, leader, ChatColor.DARK_PURPLE, false);
+        NameTags.color(leader, player, ChatColor.DARK_PURPLE, false);
+
         leader.sendMessage("Vous pouvez split party maintenant");
         SplitParty splitParty = new SplitParty(party);
         TFight.INSTANCE.getSplitPartyManager().add(party);
@@ -65,6 +76,10 @@ public class PartieListener implements Listener {
         Party party = event.getParty();
         Player player = Bukkit.getPlayer(partyPlayer.getPlayerUUID());
         TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get(player);
+        Player leader = Bukkit.getPlayer(party.getLeader());
+
+        NameTags.reset(player , leader);
+        NameTags.reset(leader , player);
 
         if(TFight.INSTANCE.getPlayerManager().get(player).getPlayerState() == PlayerState.FIGHTING) {
             return;
@@ -75,7 +90,6 @@ public class PartieListener implements Listener {
             TFight.INSTANCE.getSplitPartyManager().remove(party);
             Bukkit.getPlayer(party.getLeader()).sendMessage("Vous pouvez plus Split Party");
             player.sendMessage("Vous pouvez plus Split Party");
-            Player leader = Bukkit.getPlayer(party.getLeader());
             leader.getInventory().clear();
             if(QueueManager.INSTANCE.isInQueue(leader)) {
                 QueueManager.INSTANCE.remove(party);
@@ -86,6 +100,28 @@ public class PartieListener implements Listener {
                 QueueManager.INSTANCE.giveQueueItem(leader);
                 FightManager.INSTANCE.giveSpecItem(leader);
             }
+        }
+
+    }
+
+    @EventHandler
+    public void onPartyDelete(BukkitPartiesPartyPreDeleteEvent event) {
+        Player leader = Bukkit.getPlayer(event.getParty().getLeader());
+        Party party = event.getParty();
+        List<Player> allplayer = new ArrayList<>();
+        if(QueueManager.INSTANCE.isInQueue(leader)) {
+            QueueManager.INSTANCE.remove(party);
+        }
+        leader.getInventory().clear();
+        QueueManager.INSTANCE.giveQueueItem(leader);
+        FightManager.INSTANCE.giveSpecItem(leader);
+
+        for(UUID uuid : party.getMembers()) {
+            allplayer.add(Bukkit.getPlayer(uuid));
+        }
+        for(Player player : allplayer) {
+            NameTags.reset(player , leader);
+            NameTags.reset(leader , player);
         }
 
     }

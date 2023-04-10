@@ -2,6 +2,7 @@ package fr.salers.teamfight.scoreboard.adapter;
 
 import fr.salers.teamfight.TFight;
 import fr.salers.teamfight.manager.PlayerManager;
+import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,6 +25,22 @@ public class TeamfightCache {
             }
         }
         return size;
+    }
+
+    public static int getPlayersInQueue() {
+        List<TFPlayer> tfPlayerList = new ArrayList<>();
+        int size = 0;
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            tfPlayerList.add(TFight.INSTANCE.getPlayerManager().get(player));
+        }
+
+        for(TFPlayer tfPlayer : tfPlayerList) {
+            if(QueueManager.INSTANCE.isInQueue(tfPlayer.getPlayer())) {
+                size ++;
+            }
+        }
+        return size;
+
     }
 
     public static int getPlayersOnline() {
