@@ -78,6 +78,7 @@ public class TFPlayer {
 
     public void setToLobby() {
         player.getInventory().clear();
+        activeFight = null;
         this.setPlayerState(PlayerState.SPAWN);
         player.setHealth(20.D);
         player.getInventory().setArmorContents(null);

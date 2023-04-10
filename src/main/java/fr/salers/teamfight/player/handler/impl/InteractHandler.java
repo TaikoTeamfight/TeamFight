@@ -1,11 +1,13 @@
 package fr.salers.teamfight.player.handler.impl;
 
+import com.alessiodp.parties.api.interfaces.Party;
 import fr.salers.teamfight.manager.FightManager;
 import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.manager.QueueManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.handler.AbstractHandler;
 import fr.salers.teamfight.player.state.PlayerState;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -64,11 +66,18 @@ public class InteractHandler extends AbstractHandler {
 
             final Player target = (Player) event.getEntity();
 
-            // TODO CHECK IF NOT IN PARTY SPLIT
-            if (PartyManager.INSTANCE.isInParty(tfPlayer.getPlayer()) && tfPlayer.isFighting()) {
-                event.setCancelled(PartyManager.INSTANCE.getPlayersOnlineParty(PartyManager.INSTANCE.getPartyFromPlayer(tfPlayer.getPlayer())
-                ).stream().anyMatch(player -> player.getUniqueId().equals(target.getUniqueId())));
+            if(!tfPlayer.isFighting()) {
+                event.setCancelled(true);
             }
+
+            if(!event.isCancelled()) {
+                if (((EntityDamageByEntityEvent) e).getFinalDamage() - target.getPlayer().getHealth() >= 0)
+                    tfPlayer.getActiveFight().handleKill(tfPlayer.getPlayer());
+            }
+
+
+
+
         } else if (e instanceof EntityDamageEvent) {
             final ItemStack inHand = tfPlayer.getPlayer().getItemInHand();
 

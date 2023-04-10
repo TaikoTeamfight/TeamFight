@@ -1,8 +1,11 @@
 package fr.salers.teamfight.listener;
 
+import com.alessiodp.parties.api.interfaces.Party;
 import fr.salers.teamfight.TFight;
+import fr.salers.teamfight.manager.PartyManager;
 import fr.salers.teamfight.player.TFPlayer;
 import fr.salers.teamfight.player.state.PlayerState;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -60,26 +63,37 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onAttack(final EntityDamageByEntityEvent event) {
-        if(!(event.getDamager() instanceof Player)) return;
+        if (!(event.getDamager() instanceof Player) || !(event.getEntity() instanceof Player)) return;
         final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) event.getDamager());
+        final Player target = (Player) event.getEntity();
         tfPlayer.handleEvent(event);
+
+
+        if (PartyManager.INSTANCE.isInParty(tfPlayer.getPlayer()) && PartyManager.INSTANCE.isInParty(target)) {
+            final Party party = PartyManager.INSTANCE.getPartyFromPlayer(tfPlayer.getPlayer());
+            final boolean sameParty = PartyManager.INSTANCE.getPartyFromPlayer(target).equals(party);
+            if (sameParty)
+                event.setCancelled(true);
+        }
     }
 
     @EventHandler
     public void onDamage(final EntityDamageEvent event) {
-        if(!(event.getEntity() instanceof Player)) return;
+        if (!(event.getEntity() instanceof Player)) return;
         final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) event.getEntity());
         tfPlayer.handleEvent(event);
+
+
     }
 
     @EventHandler
-    public void onHungerLoos(FoodLevelChangeEvent e) {
-        if(!(e.getEntity() instanceof Player)) {
+    public void onHungerLoose(FoodLevelChangeEvent e) {
+        if (!(e.getEntity() instanceof Player)) {
             return;
         }
         Player player = (Player) e.getEntity();
         final TFPlayer tfPlayer = TFight.INSTANCE.getPlayerManager().get((Player) player);
-        if(tfPlayer.getPlayerState() != PlayerState.SPAWN) {
+        if (tfPlayer.getPlayerState() != PlayerState.SPAWN) {
             return;
         } else {
             e.setFoodLevel(20);
